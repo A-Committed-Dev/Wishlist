@@ -10,9 +10,10 @@
 		desc =
 			"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s";
 	}
+	export let id = '';
 </script>
 
-<div class="wish-card">
+<div class="wish-card" {id}>
 	<img class="wish-card-img" src={imgUrl} alt="Product" />
 	<div class="wish-card-body">
 		<h3 class="wish-card-title">{title}</h3>
@@ -96,5 +97,11 @@
 	.wish-card-button:focus {
 		transform: translateY(-2px);
 		box-shadow: 0 10px 20px rgba(11, 110, 253, 0.18);
+	}
+
+	@media (max-width: 1600px) {
+		.wish-card-img {
+			height: auto;
+		}
 	}
 </style>

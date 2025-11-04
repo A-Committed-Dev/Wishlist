@@ -1,5 +1,17 @@
+<script>
+	export let showNavbar = false;
+
+	function toggleNavbar() {
+		if (showNavbar) {
+			showNavbar = false;
+		} else {
+			showNavbar = true;
+		}
+	}
+</script>
+
 <div class="navbar">
-	<button class="nav-burgermenu">≡</button>
+	<button class="nav-burgermenu" onclick={toggleNavbar}>≡</button>
 	<h1 class="nav-title">Claus's Wishlist</h1>
 </div>
 

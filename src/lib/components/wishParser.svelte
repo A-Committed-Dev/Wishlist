@@ -1,5 +1,7 @@
 <script lang="ts">
 	import Wish from './wish.svelte';
+	import { categories } from '$lib/categoryStore';
+	let category: string = '';
 	let url = '';
 	let images: string[] = [];
 	let text: string[] = [];
@@ -44,9 +46,9 @@
 		selectedImage = src;
 	}
 
-	function createWish() {
-		if (!selectedImage || !selectedTitle || !desc || !url) {
-			alert('Please select an image, title, enter a URL and description');
+	async function createWish() {
+		if (!selectedImage || !selectedTitle || !desc || !category || !url) {
+			alert('Please select an image, title, category, enter a URL and description');
 			return;
 		}
 
@@ -54,18 +56,41 @@
 			url,
 			imgUrl: selectedImage,
 			title: selectedTitle,
-			desc
+			desc,
+			category
 		};
 
-		console.log('Wish created:', wish);
+		try {
+			const response = await fetch('http://localhost:8000/wishStore.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(wish)
+			});
 
-		selectedImage = '';
-		selectedTitle = '';
-		desc = '';
-		url = '';
-		images = [];
-		text = [];
-		title = null;
+			const result = await response.json();
+
+			if (response.ok) {
+				console.log('Wish saved successfully:', result);
+				alert('Wish saved successfully!');
+				// Reset form/variables
+				selectedImage = '';
+				selectedTitle = '';
+				desc = '';
+				category = '';
+				url = '';
+				images = [];
+				text = [];
+				title = null;
+			} else {
+				console.error('Error saving wish:', result);
+				alert('Error saving wish: ' + (result.error || 'Unknown error'));
+			}
+		} catch (error) {
+			console.error('Network error:', error);
+			alert('Network error while saving wish.');
+		}
 	}
 
 	async function fetchWebsite() {
@@ -79,23 +104,82 @@
 			return;
 		}
 
-		if (data.html) {
-			// Parse HTML in browser
-			const parser = new DOMParser();
-			const doc = parser.parseFromString(data.html, 'text/html');
+		if (!data.html) return;
 
-			// Extract images
-			images = Array.from(doc.querySelectorAll('img')).map((img) => img.src);
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(data.html, 'text/html');
 
-			// Get the <title> tag text
-			const titleTag = doc.querySelector('title');
-			title = titleTag ? titleTag.textContent?.trim() || null : null;
+		// --- Extract keywords from URL ---
+		const urlObj = new URL(url);
+		const urlPath = urlObj.pathname.toLowerCase();
+		const urlTokens = urlPath
+			.replace(/[^\w\s-]/g, ' ')
+			.split(/[-_/]+/)
+			.filter((w) => w.length > 2 && !/^\d+$/.test(w));
 
-			// Extract all text
-			text = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
-				.map((h) => h.textContent?.trim() || '')
-				.filter(Boolean);
+		console.log('🔍 URL tokens:', urlTokens);
+
+		// --- Extract all images ---
+		const base = urlObj;
+		const allImages = Array.from(doc.querySelectorAll('img'))
+			.map((img) => {
+				let src = img.getAttribute('src') || '';
+				if (!src) return null;
+
+				try {
+					src = new URL(src, base).href;
+				} catch {
+					return null;
+				}
+
+				return {
+					src,
+					alt: img.getAttribute('alt')?.toLowerCase() || ''
+				};
+			})
+			.filter(Boolean);
+
+		// --- Filter images using URL tokens ---
+		let filteredImages = allImages.filter((img) => {
+			const filename = img.src.split('/').pop()?.toLowerCase() || '';
+			return urlTokens.some((word) => filename.includes(word) || img.alt.includes(word));
+		});
+
+		// Exclude likely non-product images (logos, icons, etc.)
+		filteredImages = filteredImages.filter(
+			(img) => !/(logo|icon|sprite|banner|thumb|placeholder)/i.test(img.src)
+		);
+
+		// Fallbacks if nothing matched
+		if (filteredImages.length === 0) {
+			filteredImages = allImages.filter((img) =>
+				/(product|main|gallery|large|item|image)/i.test(img.src)
+			);
 		}
+		if (filteredImages.length === 0) filteredImages = allImages;
+
+		images = filteredImages.map((img) => img.src);
+
+		// --- Extract headings ---
+		const allHeadings = Array.from(doc.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+			.map((h) => h.textContent?.trim() || '')
+			.filter(Boolean);
+
+		let filteredHeadings = allHeadings.filter((heading) => {
+			const text = heading.toLowerCase();
+			return urlTokens.some((word) => text.includes(word));
+		});
+
+		// Fallback: use all headings if none matched
+		if (filteredHeadings.length === 0) filteredHeadings = allHeadings;
+
+		text = filteredHeadings;
+
+		// --- Also get <title> ---
+		const titleTag = doc.querySelector('title');
+		title = titleTag ? titleTag.textContent?.trim() || null : null;
+
+		console.log(`✅ Found ${images.length} filtered images and ${text.length} filtered headings`);
 	}
 </script>
 
@@ -132,7 +216,17 @@
 				<Wish {url} imgUrl={selectedImage} {desc} title={selectedTitle}></Wish>
 			</div>
 		</div>
-		<h3>Description:</h3>
+
+		<div class="desc-container">
+			<h3>Description:</h3>
+			<h3 class="catgory-title">Category:</h3>
+			<select class="category-box" name="category" bind:value={category}>
+				{#each categories as category}
+					<option value={category}>{category}</option>
+				{/each}
+			</select>
+		</div>
+
 		<textarea class="desc" bind:value={desc}></textarea>
 		<button class="create-button" onclick={createWish}>Create wish</button>
 	</div>
@@ -314,5 +408,26 @@
 	.input-search {
 		text-overflow: ellipsis;
 		overflow: hidden;
+	}
+
+	.desc-container {
+		display: flex;
+		flex-direction: row;
+		width: 100%;
+		gap: 1em;
+		overflow: hidden;
+	}
+
+	.catgory-title {
+		margin-left: auto;
+	}
+
+	.category-box {
+		border-style: none;
+		background-color: #689aef;
+		color: white;
+		border-radius: 1em;
+		padding: 1em;
+		font-size: 16px;
 	}
 </style>

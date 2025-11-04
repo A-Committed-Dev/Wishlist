@@ -1,39 +1,38 @@
 <script lang="ts">
-	let categories: Array<string> = ['Home', 'Electronics', 'Tools', '3dPrint', 'Cloths'];
+	import { selectedCategory, categories } from '$lib/categoryStore';
 	let maxPrice: number = 50;
 </script>
 
 <div class="navbar">
-	<h1 class="nav-title">Claus's Wishlist</h1>
-
 	<div class="nav-checkboxes">
 		<h3>Categories</h3>
 		{#each categories as category}
 			<div class="checkbox-item">
 				<label for={category}>{category}</label>
-				<input type="checkbox" id={category} name={category} checked />
+				<input
+					type="checkbox"
+					id={category}
+					name={category}
+					bind:checked={$selectedCategory[category]}
+				/>
 			</div>
 		{/each}
 	</div>
 
-	<div class="price-slider">
-		<h3>Max price</h3>
-		<div class="price-display">{maxPrice} .kr</div>
-		<input type="range" min="0" max="500" bind:value={maxPrice} />
-	</div>
+	<!-- <div class="price-slider"> -->
+	<!-- 	<h3>Max price</h3> -->
+	<!-- 	<div class="price-display">{maxPrice} .kr</div> -->
+	<!-- 	<input type="range" min="0" max="500" bind:value={maxPrice} /> -->
+	<!-- </div> -->
 </div>
 
 <style>
-	.nav-title {
-		font-size: 25px;
-	}
-
 	.navbar {
 		border-radius: 1em;
 		background-color: #ffffff;
 		width: 20%;
 		height: 100%;
-		padding: 1em;
+		padding: 2em;
 		box-sizing: border-box;
 		margin-right: 1em;
 		display: flex;
@@ -113,5 +112,19 @@
 		cursor: pointer;
 		accent-color: #689aef;
 		border-radius: 2em;
+	}
+
+	@media (max-width: 1500px) {
+		.navbar {
+			position: fixed;
+
+			width: calc(100% - 2rem);
+			height: calc(91% - 2rem);
+
+			z-index: 1000;
+
+			background-color: rgba(255, 255, 255, 0.95);
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+		}
 	}
 </style>

@@ -24,7 +24,7 @@
 	}
 
 	/* Responsive tweaks */
-	@media (max-width: 600px) {
+	@media (max-width: 900px) {
 		.wish-container {
 			grid-template-columns: 1fr;
 		}
