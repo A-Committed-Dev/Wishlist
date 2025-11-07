@@ -20,4 +20,10 @@
 		display: flex;
 		flex-direction: column;
 	}
+
+	@media (max-width: 900px) {
+		.view-container {
+			padding: 0.5rem;
+		}
+	}
 </style>

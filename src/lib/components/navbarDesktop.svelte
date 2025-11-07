@@ -30,7 +30,7 @@
 
 <style>
 	.navbar-outside {
-		width: 20%;
+		width: 25%;
 		height: 100%;
 		border-radius: 1em;
 		overflow: hidden;
@@ -69,7 +69,7 @@
 		gap: 1em;
 		box-sizing: border-box;
 		padding: 2em;
-		width: 90%;
+		width: 100%;
 
 		align-items: center;
 	}
@@ -127,15 +127,20 @@
 
 	@media (max-width: 1500px) {
 		.navbar {
-			position: fixed;
-
-			width: calc(100% - 2rem);
-			height: calc(91% - 2rem);
+			position: absolute;
 
 			z-index: 1000;
 
 			background-color: rgba(255, 255, 255, 0.95);
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+		}
+
+		.navbar-outside {
+			width: calc(100% - 1rem);
+			height: calc(90% - 0.8rem);
+			position: absolute;
+			padding-right: 0em;
+			padding-top: 0.5em;
 		}
 	}
 </style>

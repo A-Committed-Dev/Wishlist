@@ -47,6 +47,12 @@
 	@media (max-width: 900px) {
 		.wish-container {
 			grid-template-columns: 1fr;
+			padding: 1em;
+			grid-auto-rows: 70%;
+		}
+
+		.wish-container-outside {
+			padding-top: 0.5em;
 		}
 	}
 </style>

@@ -10,6 +10,7 @@
 
 	let selectedImage: any;
 	let selectedTitle: any;
+	let titleLength: number = 65;
 	let desc = '';
 	let id = '';
 
@@ -27,7 +28,7 @@
 		const text = paragraph.textContent?.trim() || '';
 		console.log('Selected paragraph text:', text);
 
-		selectedTitle = text;
+		selectedTitle = text.slice(0, titleLength);
 	}
 
 	function handleImageClick(event: MouseEvent) {

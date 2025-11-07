@@ -5,20 +5,46 @@
 	export let wish: IWish;
 	const oldWish = wish;
 
+	async function pushWishes() {
+		try {
+			const res = await fetch('http://localhost:8000/wishUpdate.php', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ wishes: $wishes })
+			});
+
+			if (!res.ok) {
+				const err = await res.json().catch(() => ({}));
+				throw new Error(err.error || `HTTP ${res.status}`);
+			}
+		} catch (err) {
+			console.error('Failed to sync wishes:', err);
+		}
+	}
+
 	function updateWish() {
 		$wishes[$wishes.indexOf(oldWish)] = wish;
-		$selectedWish = null;
+		$wishes = [...$wishes]; // trigger reactivity
+		pushWishes();
+		closeEditor();
 	}
 
 	function deleteWish() {
 		$wishes.splice($wishes.indexOf(oldWish), 1);
-		$wishes = [...$wishes];
+		$wishes = [...$wishes]; // trigger reactivity
+		pushWishes();
+		closeEditor();
+	}
+
+	function closeEditor() {
 		$selectedWish = null;
 	}
 </script>
 
-<div class="wish-edit-backdrop">
-	<div class="wish-edit-container">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class="wish-edit-backdrop" onclick={closeEditor}>
+	<div class="wish-edit-container" onclick={(e) => e.stopPropagation()}>
 		<Wish
 			edit={true}
 			bind:category={wish.category}

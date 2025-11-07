@@ -5,7 +5,8 @@
 	import View from '$lib/components/view.svelte';
 	import Wish from '$lib/components/wish.svelte';
 	import Wishlist from '$lib/components/wishlist.svelte';
-	import { selectedCategory, type Categories } from '$lib/categoryStore';
+	import { wishes } from '$lib/wishStore';
+	import { selectedCategory } from '$lib/categoryStore';
 
 	let showNavbar = false;
 	let screenWidth: number = 0;
@@ -28,15 +29,6 @@
 		return () => window.removeEventListener('resize', updateWidth);
 	});
 
-	interface Wish {
-		url: string;
-		imgUrl: string;
-		title: string;
-		desc: string;
-		category: Categories;
-	}
-	let wishes: Wish[] = [];
-
 	async function fetchWishes() {
 		try {
 			const response = await fetch('http://localhost:8000/wishStore.php'); // URL of your PHP script
@@ -46,7 +38,7 @@
 
 			const data = await response.json();
 			// Access the wishes array from the wrapped object
-			wishes = data.wishes;
+			$wishes = data.wishes;
 
 			console.log('Fetched wishes:', wishes);
 
@@ -57,7 +49,7 @@
 		}
 	}
 
-	$: filteredWishes = wishes.filter((wish) => $selectedCategory[wish.category]);
+	$: filteredWishes = $wishes.filter((wish) => $selectedCategory[wish.category]);
 </script>
 
 <View>
@@ -70,12 +62,7 @@
 
 		<Wishlist {showNavbar}>
 			{#each filteredWishes as wish}
-				<Wish
-					imgUrl={wish.imgUrl}
-					url={wish.url}
-					desc={wish.desc}
-					title={wish.title}
-					id={wish.category}
+				<Wish imgUrl={wish.imgUrl} url={wish.url} desc={wish.desc} title={wish.title} id={wish.id}
 				></Wish>
 			{/each}
 		</Wishlist>

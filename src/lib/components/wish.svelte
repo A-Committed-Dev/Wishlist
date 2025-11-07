@@ -56,6 +56,7 @@
 				bind:value={title}
 				placeholder="Title:"
 				autocomplete="off"
+				maxlength="65"
 			/>
 			<div class="wish-edit-outer">
 				<textarea
@@ -64,6 +65,7 @@
 					bind:value={desc}
 					placeholder={tmpDesc}
 					autocomplete="off"
+					maxlength="140"
 				></textarea>
 			</div>
 
@@ -96,6 +98,7 @@
 			'Helvetica Neue',
 			Arial;
 		position: relative;
+		overflow: hidden;
 	}
 
 	.wish-card.selectable:hover {
@@ -128,15 +131,11 @@
 	}
 
 	.wish-card-title {
-		height: 20%;
-		margin: 0;
+		padding: 0.3em 0;
 		font-size: 20px;
 		font-weight: 600;
 		color: #111;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 6px;
+		margin: 0;
 	}
 
 	.wish-card-title.preview {
@@ -155,6 +154,7 @@
 		gap: 0.5em;
 		overflow: hidden;
 		overflow-y: scroll;
+		word-break: break-all;
 	}
 
 	.wish-card-desc.preview {
@@ -220,6 +220,8 @@
 		height: 20%;
 		font-weight: bold;
 		font-size: 20px;
+		white-space: normal;
+		word-break: break-all;
 	}
 
 	.wish-edit-imgUrl {
@@ -242,5 +244,15 @@
 		padding: 1em;
 		font-size: 16px;
 		cursor: pointer;
+	}
+
+	@media (max-width: 900px) {
+		.wish-card-title {
+			font-size: 16px;
+		}
+
+		.wish-card-img {
+			height: 50%;
+		}
 	}
 </style>

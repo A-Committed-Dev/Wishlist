@@ -1,5 +1,7 @@
 node_modules
 
+wishes.json
+
 # Output
 .output
 .vercel
