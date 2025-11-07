@@ -3,38 +3,49 @@
 	let maxPrice: number = 50;
 </script>
 
-<div class="navbar">
-	<div class="nav-checkboxes">
-		<h3>Categories</h3>
-		{#each categories as category}
-			<div class="checkbox-item">
-				<label for={category}>{category}</label>
-				<input
-					type="checkbox"
-					id={category}
-					name={category}
-					bind:checked={$selectedCategory[category]}
-				/>
-			</div>
-		{/each}
-	</div>
+<div class="navbar-outside">
+	<div class="navbar">
+		<div class="nav-checkboxes">
+			<h3>Categories</h3>
+			{#each categories as category}
+				<div class="checkbox-item">
+					<label for={category}>{category}</label>
+					<input
+						type="checkbox"
+						id={category}
+						name={category}
+						bind:checked={$selectedCategory[category]}
+					/>
+				</div>
+			{/each}
+		</div>
 
-	<!-- <div class="price-slider"> -->
-	<!-- 	<h3>Max price</h3> -->
-	<!-- 	<div class="price-display">{maxPrice} .kr</div> -->
-	<!-- 	<input type="range" min="0" max="500" bind:value={maxPrice} /> -->
-	<!-- </div> -->
+		<!-- <div class="price-slider"> -->
+		<!-- 	<h3>Max price</h3> -->
+		<!-- 	<div class="price-display">{maxPrice} .kr</div> -->
+		<!-- 	<input type="range" min="0" max="500" bind:value={maxPrice} /> -->
+		<!-- </div> -->
+	</div>
 </div>
 
 <style>
+	.navbar-outside {
+		width: 20%;
+		height: 100%;
+		border-radius: 1em;
+		overflow: hidden;
+		padding-right: 1em;
+		padding-top: 1em;
+		background-color: transparent;
+		box-sizing: border-box;
+	}
 	.navbar {
 		border-radius: 1em;
 		background-color: #ffffff;
-		width: 20%;
+		width: 100%;
 		height: 100%;
 		padding: 2em;
 		box-sizing: border-box;
-		margin-right: 1em;
 		display: flex;
 		flex-direction: column;
 		gap: 1em;

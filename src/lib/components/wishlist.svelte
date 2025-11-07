@@ -1,11 +1,30 @@
 <script>
 </script>
 
-<div class="wish-container">
-	<slot>Should contain wishes</slot>
+<div class="wish-container-outside">
+	<div class="wish-container-scroll">
+		<div class="wish-container">
+			<slot>Should contain wishes</slot>
+		</div>
+	</div>
 </div>
 
 <style>
+	.wish-container-outside {
+		width: 100%;
+		height: 100%;
+		border-radius: 1em;
+		overflow: hidden;
+		padding-top: 1em;
+		background-color: transparent;
+		box-sizing: border-box;
+	}
+
+	.wish-container-scroll {
+		overflow-y: scroll;
+		height: 100%;
+	}
+
 	.wish-container {
 		border-radius: 1em;
 		background-color: #ffffff;
@@ -18,9 +37,7 @@
 		padding: 2em;
 		justify-items: center;
 		box-sizing: border-box;
-		overflow-y: auto;
 		overflow-x: hidden;
-		scrollbar-gutter: stable;
 	}
 
 	/* Responsive tweaks */

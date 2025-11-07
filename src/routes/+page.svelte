@@ -68,7 +68,7 @@
 			<NavbarDesktop />
 		{/if}
 
-		<Wishlist>
+		<Wishlist {showNavbar}>
 			{#each filteredWishes as wish}
 				<Wish
 					imgUrl={wish.imgUrl}

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Wish from './wish.svelte';
-	import { categories } from '$lib/categoryStore';
 	let category: string = '';
 	let url = '';
 	let images: string[] = [];
@@ -75,7 +74,7 @@
 				console.log('Wish saved successfully:', result);
 				alert('Wish saved successfully!');
 				// Reset form/variables
-				selectedImage = '';
+				selectedImage = 'https://placehold.co/600x400/EEE/31343C';
 				selectedTitle = '';
 				desc = '';
 				category = '';
@@ -184,28 +183,38 @@
 </script>
 
 <div class="container">
-	<div class="sub-container">
+	<div class="selection-container">
 		<div class="input">
 			<input
 				type="text"
 				bind:value={url}
 				placeholder="Enter website URL"
 				class="desc input-search"
+				autocomplete="off"
 			/>
 			<button onclick={fetchWebsite} class="create-button input-button">Fetch</button>
 		</div>
-		<div class="images" onclick={handleImageClick}>
+		<div class="images-container">
 			<h3>Images:</h3>
-			{#each images as src}
-				<img {src} width="150" />
-			{/each}
+			<div class="images-outside">
+				<div class="images" onclick={handleImageClick}>
+					{#each images as src}
+						<img {src} width="150" alt="product" />
+					{/each}
+				</div>
+			</div>
 		</div>
-		<div class="headings" onclick={handleParagraphClick}>
+
+		<div class="headings-container">
 			<h3>Headings:</h3>
-			<p>{title}</p>
-			{#each text as heading}
-				<p>{heading}</p>
-			{/each}
+			<div class="headings-outside">
+				<div class="headings" onclick={handleParagraphClick}>
+					<p>{title}</p>
+					{#each text as heading}
+						<p>{heading}</p>
+					{/each}
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -213,21 +222,17 @@
 		<h3>Preview:</h3>
 		<div class="preview">
 			<div class="wish-limiter">
-				<Wish {url} imgUrl={selectedImage} {desc} title={selectedTitle}></Wish>
+				<Wish
+					{url}
+					bind:imgUrl={selectedImage}
+					bind:desc
+					bind:title={selectedTitle}
+					preview={true}
+					edit={true}
+					bind:category
+				></Wish>
 			</div>
 		</div>
-
-		<div class="desc-container">
-			<h3>Description:</h3>
-			<h3 class="catgory-title">Category:</h3>
-			<select class="category-box" name="category" bind:value={category}>
-				{#each categories as category}
-					<option value={category}>{category}</option>
-				{/each}
-			</select>
-		</div>
-
-		<textarea class="desc" bind:value={desc}></textarea>
 		<button class="create-button" onclick={createWish}>Create wish</button>
 	</div>
 </div>
@@ -248,7 +253,7 @@
 	}
 
 	.creation-container {
-		width: 30%;
+		width: 40%;
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -258,6 +263,7 @@
 		box-sizing: border-box;
 		padding: 2em;
 		gap: 1em;
+		overflow: hidden;
 	}
 	.creation-container h3 {
 		align-self: flex-start;
@@ -265,7 +271,7 @@
 
 	.preview {
 		width: 100%;
-		height: 50%;
+		height: 100%;
 		background-color: #f5f5f5;
 		padding: 2em;
 		border-radius: 1em;
@@ -274,11 +280,12 @@
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		position: relative;
 	}
 
 	.wish-limiter {
-		width: 100%;
-		max-width: 350px;
+		width: 90%;
+		height: 100%;
 	}
 
 	.desc {
@@ -304,11 +311,11 @@
 	.create-button {
 		text-decoration: none;
 		text-align: center;
-		padding: 10px 12px;
-		border-radius: 8px;
+		padding: 1.2em;
+		border-radius: 1em;
 		font-weight: 600;
-		font-size: 13px;
-		border: 1px solid transparent;
+		font-size: 18px;
+		border-style: none;
 		transition:
 			transform 120ms ease,
 			box-shadow 120ms ease;
@@ -318,6 +325,7 @@
 		width: 100%;
 		box-sizing: border-box;
 		margin-top: auto;
+		cursor: pointer;
 	}
 
 	.create-button:hover,
@@ -325,78 +333,127 @@
 		transform: translateY(-2px);
 		box-shadow: 0 10px 20px rgba(11, 110, 253, 0.18);
 	}
-	.sub-container {
+	.selection-container {
 		display: flex;
 		flex-direction: column;
 		gap: 1em;
-		width: 70%;
+		width: 60%;
 		height: 100%;
 	}
 
-	.headings {
+	.headings-container {
+		background-color: #ffffff;
+		border-radius: 1em;
+		width: 100%;
+		height: 45%;
 		background-color: #ffffff;
 		border-radius: 1em;
 		width: 100%;
 		height: 45%;
 		box-sizing: border-box;
 		padding: 2em;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.headings {
+		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
+		background-color: #f5f5f5;
+		border-radius: 1em;
+		padding: 2em;
+		padding-right: 3em;
+		padding-left: 3em;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 		grid-auto-rows: min-content;
-		gap: 2em;
+		gap: 4em;
 		overflow-y: scroll;
-		overflow-x: hidden;
+		font-weight: 500;
 	}
 
-	.title {
+	.headings-outside {
+		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
+		overflow: hidden;
+		border-radius: 1em;
+		background-color: pink;
+	}
+
+	.headings p:hover {
+		transform: scale(1.25);
+		cursor: pointer;
+	}
+
+	.images-container {
 		background-color: #ffffff;
 		border-radius: 1em;
 		width: 100%;
-		height: 10%;
+		height: 45%;
+		background-color: #ffffff;
+		border-radius: 1em;
+		width: 100%;
+		height: 45%;
 		box-sizing: border-box;
 		padding: 2em;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.images {
-		background-color: #ffffff;
-		border-radius: 1em;
+		height: 100%;
 		width: 100%;
-		height: 45%;
 		box-sizing: border-box;
+		background-color: #f5f5f5;
+		border-radius: 1em;
 		padding: 2em;
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 		grid-auto-rows: min-content;
 		gap: 2em;
 		overflow-y: scroll;
-		overflow-x: hidden;
+	}
+
+	.images-outside {
+		height: 100%;
+		width: 100%;
+		box-sizing: border-box;
+		overflow: hidden;
+		border-radius: 1em;
+		background-color: pink;
+	}
+
+	.images img {
+		border-radius: 1em;
 	}
 
 	.images img:hover {
-		background-color: #f2f2f2;
-		padding: 2em;
-		box-sizing: border-box;
+		/* background-color: #689aef; */
+		/* padding: 2em; */
+		/* box-sizing: border-box; */
+		transform: scale(1.25);
 		border-radius: 1em;
+		cursor: pointer;
 	}
-	.headings p:hover {
-		background-color: #f2f2f2;
-		box-sizing: border-box;
-		padding: 1em;
-		border-radius: 1em;
-	}
+
 	.input {
 		background-color: #ffffff;
 		border-radius: 1em;
 		width: 100%;
 		height: 10%;
 		box-sizing: border-box;
-		padding: 2em;
+		padding: 3em;
 		display: grid;
 		align-content: center;
 		justify-content: center;
 		place-items: center;
 		grid-template-columns: 90% 1fr;
 		gap: 1em;
+		overflow: hidden;
 	}
 
 	.input-button {
@@ -410,24 +467,24 @@
 		overflow: hidden;
 	}
 
-	.desc-container {
-		display: flex;
-		flex-direction: row;
-		width: 100%;
-		gap: 1em;
-		overflow: hidden;
-	}
+	/* Responsive tweaks */
+	@media (max-width: 900px) {
+		.container {
+			flex-direction: column;
+		}
 
-	.catgory-title {
-		margin-left: auto;
-	}
+		.creation-container,
+		.selection-container {
+			width: 100%;
+		}
 
-	.category-box {
-		border-style: none;
-		background-color: #689aef;
-		color: white;
-		border-radius: 1em;
-		padding: 1em;
-		font-size: 16px;
+		.headings-container,
+		.images-container {
+			height: 50vh;
+		}
+
+		:global(html) {
+			height: auto;
+		}
 	}
 </style>

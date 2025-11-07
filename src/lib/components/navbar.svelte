@@ -45,7 +45,7 @@
 		height: 10%;
 		padding: 1em;
 		box-sizing: border-box;
-		margin-bottom: 1em;
+		/* margin-bottom: 1em; */
 		display: flex;
 		flex-direction: row;
 		gap: 2em;
