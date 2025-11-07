@@ -21,8 +21,10 @@
 	}
 
 	.wish-container-scroll {
-		overflow-y: scroll;
+		border-radius: 1em;
+		overflow: hidden;
 		height: 100%;
+		width: 100%;
 	}
 
 	.wish-container {
@@ -38,6 +40,7 @@
 		justify-items: center;
 		box-sizing: border-box;
 		overflow-x: hidden;
+		overflow-y: scroll;
 	}
 
 	/* Responsive tweaks */

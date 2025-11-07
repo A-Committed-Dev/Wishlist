@@ -1,5 +1,6 @@
 <script>
 	import { categories } from '$lib/categoryStore';
+	import { wishes, selectedWish } from '$lib/wishStore';
 	export let category = '';
 	export let imgUrl = 'https://placehold.co/600x400/EEE/31343C';
 	export let title = '';
@@ -8,7 +9,7 @@
 	export let id = '';
 	export let edit = false;
 	export let preview = false;
-	export let deleteable = false;
+	export let selectable = false;
 
 	let changeUrl = false;
 	let tmpDesc =
@@ -17,13 +18,16 @@
 	function changeUrlToggle() {
 		changeUrl = !changeUrl;
 	}
+
+	function handleClick() {
+		$selectedWish = $wishes.find((wish) => wish.id === id) || null;
+		console.log($selectedWish);
+	}
 </script>
 
-<div class="wish-card" {id}>
-	{#if deleteable}
-		<button class="wish-delete-button">X</button>
-	{/if}
-
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div class={['wish-card', { selectable }]} {id} onclick={handleClick}>
 	{#if edit}
 		<select class="wish-edit-category-box" name="category" bind:value={category}>
 			<option value="" disabled selected hidden>Select a Category</option>
@@ -92,6 +96,10 @@
 			'Helvetica Neue',
 			Arial;
 		position: relative;
+	}
+
+	.wish-card.selectable:hover {
+		transform: scale(1.05);
 	}
 
 	.wish-card-img {
@@ -234,17 +242,5 @@
 		padding: 1em;
 		font-size: 16px;
 		cursor: pointer;
-	}
-
-	.wish-delete-button {
-		border-radius: 99%;
-		background-color: red;
-		color: #ffffff;
-		padding: 0.5em;
-		font-size: 20px;
-		position: absolute;
-		top: -1em;
-		left: -1em;
-		border-style: none;
 	}
 </style>

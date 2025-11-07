@@ -1,5 +1,7 @@
 <script lang="ts">
+	// TODO: Use the inteface and types from stores
 	import Wish from './wish.svelte';
+
 	let category: string = '';
 	let url = '';
 	let images: string[] = [];
@@ -9,6 +11,7 @@
 	let selectedImage: any;
 	let selectedTitle: any;
 	let desc = '';
+	let id = '';
 
 	function handleParagraphClick(event: MouseEvent) {
 		const target = event.target as HTMLElement;
@@ -51,12 +54,15 @@
 			return;
 		}
 
+		id = crypto.randomUUID().toString();
+
 		const wish = {
 			url,
 			imgUrl: selectedImage,
 			title: selectedTitle,
 			desc,
-			category
+			category,
+			id
 		};
 
 		try {

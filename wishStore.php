@@ -25,7 +25,7 @@ if ($method === 'GET') {
 } elseif ($method === 'POST') {
   $input = json_decode(file_get_contents('php://input'), true);
 
-  $requiredFields = ['url', 'imgUrl', 'title', 'desc', 'category'];
+  $requiredFields = ['url', 'imgUrl', 'title', 'desc', 'category', 'id'];
   foreach ($requiredFields as $field) {
     if (!isset($input[$field]) || empty($input[$field])) {
       http_response_code(400);
@@ -48,7 +48,8 @@ if ($method === 'GET') {
     'imgUrl' => $input['imgUrl'],
     'title' => $input['title'],
     'desc' => $input['desc'],
-    'category' => $input['category']
+    'category' => $input['category'],
+    'id' => $input['id']
   ];
 
   // Save back
