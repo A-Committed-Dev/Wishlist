@@ -155,6 +155,7 @@
 		overflow: hidden;
 		overflow-y: scroll;
 		word-break: break-all;
+		height: 50%;
 	}
 
 	.wish-card-desc.preview {
@@ -246,7 +247,7 @@
 		cursor: pointer;
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 1500px) {
 		.wish-card-title {
 			font-size: 16px;
 		}
@@ -255,4 +256,35 @@
 			height: 50%;
 		}
 	}
+
+	@media (max-width: 900px) {
+		.wish-edit-title {
+			font-size: 13px;
+		}
+		.wish-edit-desc {
+			font-size: 12px;
+			min-height: 150px;
+		}
+
+		.wish-edit-imgUrl {
+			font-size: 13px;
+		}
+
+		.wish-edit-category-box {
+			font-size: 12px;
+		}
+
+		.wish-card-button {
+			font-size: 12px;
+		}
+
+		.wish-card-body {
+			padding: 0.5em;
+			gap: 0.5em;
+		}
+	}
+
+	/* .wish-card-img { */
+	/* 	max-height: 200px; */
+	/* } */
 </style>

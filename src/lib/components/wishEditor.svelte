@@ -56,6 +56,7 @@
 		<div class="wish-edit-button-container">
 			<button class="wish-edit-button delete-button" onclick={deleteWish}>Delete wish</button>
 			<button class="wish-edit-button" onclick={updateWish}>Update wish</button>
+			<button class="wish-edit-button close-button" onclick={closeEditor}>Close</button>
 		</div>
 	</div>
 </div>
@@ -63,8 +64,10 @@
 <style>
 	.wish-edit-container {
 		display: flex;
-		width: 35%;
-		height: 80%;
+		width: 90%;
+		height: 90%;
+		max-width: 800px;
+		max-height: 1500px;
 		gap: 1em;
 	}
 	.wish-edit-backdrop {
@@ -103,6 +106,11 @@
 		transform: translateY(-2px);
 	}
 
+	.close-button {
+		background: #ffffff;
+		color: #000000;
+	}
+
 	.delete-button {
 		background: #ef6868;
 	}
@@ -112,5 +120,16 @@
 		gap: 1em;
 		flex-direction: column;
 		display: flex;
+	}
+
+	@media (max-width: 900px) {
+		.wish-edit-container {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.wish-edit-button-container {
+			flex-direction: row;
+		}
 	}
 </style>

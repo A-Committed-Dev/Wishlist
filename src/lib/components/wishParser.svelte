@@ -206,7 +206,7 @@
 			<div class="images-outside">
 				<div class="images" onclick={handleImageClick}>
 					{#each images as src}
-						<img {src} width="150" alt="product" />
+						<img {src} width="150" alt="product" tabindex="0" />
 					{/each}
 				</div>
 			</div>
@@ -218,7 +218,7 @@
 				<div class="headings" onclick={handleParagraphClick}>
 					<p>{title}</p>
 					{#each text as heading}
-						<p>{heading}</p>
+						<p tabindex="0">{heading}</p>
 					{/each}
 				</div>
 			</div>
@@ -379,6 +379,7 @@
 		gap: 4em;
 		overflow-y: scroll;
 		font-weight: 500;
+		justify-items: center;
 	}
 
 	.headings-outside {
@@ -390,9 +391,14 @@
 		background-color: pink;
 	}
 
-	.headings p:hover {
+	.headings p:hover,
+	.headings p:focus {
 		transform: scale(1.25);
 		cursor: pointer;
+	}
+
+	.headings p {
+		text-align: center;
 	}
 
 	.images-container {
@@ -423,6 +429,7 @@
 		grid-auto-rows: min-content;
 		gap: 2em;
 		overflow-y: scroll;
+		justify-items: center;
 	}
 
 	.images-outside {
@@ -438,7 +445,8 @@
 		border-radius: 1em;
 	}
 
-	.images img:hover {
+	.images img:hover,
+	.images img:focus {
 		/* background-color: #689aef; */
 		/* padding: 2em; */
 		/* box-sizing: border-box; */
@@ -474,6 +482,15 @@
 		overflow: hidden;
 	}
 
+	@media (max-width: 1400px) {
+		.creation-container {
+			width: 50%;
+		}
+		.selection-container {
+			width: 50%;
+		}
+	}
+
 	/* Responsive tweaks */
 	@media (max-width: 900px) {
 		.container {
@@ -492,6 +509,34 @@
 
 		:global(html) {
 			height: auto;
+		}
+
+		.creation-container,
+		.images-container,
+		.headings-container,
+		.input {
+			padding: 0.75em;
+		}
+
+		.preview {
+			padding: 0.5em;
+		}
+
+		.input {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.desc {
+			font-size: 13px;
+		}
+
+		h3 {
+			font-size: 16px;
+		}
+
+		.creation-container {
+			gap: 0.5em;
 		}
 	}
 </style>

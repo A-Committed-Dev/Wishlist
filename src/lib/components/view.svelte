@@ -8,6 +8,7 @@
 		height: 100%;
 		width: 100%;
 		margin: 0;
+		background-color: #e3ecfc;
 	}
 
 	.view-container {
@@ -21,7 +22,7 @@
 		flex-direction: column;
 	}
 
-	@media (max-width: 900px) {
+	@media (max-width: 1500px) {
 		.view-container {
 			padding: 0.5rem;
 		}
